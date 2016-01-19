@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Edit the following to change the name of the database user that will be created:
-APP_DB_USER=vargant_dev
-APP_DB_PASS=vagrant_letmein
+APP_DB_USER=vagrant
+APP_DB_PASS=vagrant
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
-# APP_DB_NAME=${APP_DB_USER}_unused
+APP_DB_NAME=${APP_DB_USER}_dev
 
 # Edit the following to change the version of PostgreSQL that is installed
 PG_VERSION=9.4
@@ -86,14 +86,14 @@ cat << EOF | su - postgres -c psql
 CREATE USER $APP_DB_USER PASSWORD '$APP_DB_PASS' CREATEDB;
 EOF
 
-# cat << EOF | su - postgres -c psql
-# -- Create the database:
-# CREATE DATABASE $APP_DB_NAME WITH OWNER=$APP_DB_USER
-#                                   LC_COLLATE='en_US.utf8'
-#                                   LC_CTYPE='en_US.utf8'
-#                                   ENCODING='UTF8'
-#                                   TEMPLATE=template0;
-# EOF
+cat << EOF | su - postgres -c psql
+-- Create the database:
+CREATE DATABASE $APP_DB_NAME WITH OWNER=$APP_DB_USER
+                                  LC_COLLATE='en_US.utf8'
+                                  LC_CTYPE='en_US.utf8'
+                                  ENCODING='UTF8'
+                                  TEMPLATE=template0;
+EOF
 
 # Tag the provision time:
 date > "$PROVISIONED_ON"

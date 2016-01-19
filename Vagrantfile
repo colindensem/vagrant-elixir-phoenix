@@ -3,7 +3,7 @@
 
 $script = <<SCRIPT
 echo Beginning Vagrant provisioning...
-date > /etc/vagrant_provisioned_at
+date > /etc/vm_provision_on_timestamp
 SCRIPT
 
 
@@ -43,6 +43,7 @@ Vagrant.configure(2) do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network "forwarded_port", guest: 4000, host: 4000
   config.vm.network "forwarded_port", guest: 5432, host: 5432
+  config.vm.network "forwarded_port", guest: 35729, host: 35729
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -62,11 +63,11 @@ Vagrant.configure(2) do |config|
   #config.vm.synced_folder "./config_files", "/var/config_files", create: true
 
   #Provision it
-  config.vm.provision :shell, :path => "./config/vagrant/dependency.sh"
-  config.vm.provision :shell, :path => "./config/vagrant/nodejs.sh"
-  config.vm.provision :shell, :path => "./config/vagrant/postgresql.sh"
-  config.vm.provision :shell, :path => "./config/vagrant/elixir.sh"
-  config.vm.provision :shell, :path => "./config/vagrant/phoenix.sh"
+  config.vm.provision :shell, path: "./config/vagrant/dependency.sh"
+  config.vm.provision :shell, path: "./config/vagrant/nodejs.sh"
+  config.vm.provision :shell, path: "./config/vagrant/postgresql.sh"
+  config.vm.provision :shell, path: "./config/vagrant/elixir.sh"
+  config.vm.provision :shell, path: "./config/vagrant/phoenix_env.sh", privileged: false
 
 
   # Provider-specific configuration so you can fine-tune various
@@ -77,7 +78,7 @@ Vagrant.configure(2) do |config|
     # Display the VirtualBox GUI when booting the machine
     vb.gui = true
   
-    vb.customize ["modifyvm", :id, "--memory", "3074"]
+    vb.customize ["modifyvm", :id, "--memory", "3072"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
   end
   #
